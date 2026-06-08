@@ -7,8 +7,6 @@ namespace OCA\AeneasDispensary\Controller;
 use OCA\AeneasDispensary\AppInfo\Application;
 use OCA\AeneasDispensary\Service\DispensaryService;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\Attribute\FrontpageRoute;
-use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\AdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
@@ -35,7 +33,6 @@ class DispensaryController extends Controller {
 
     #[NoAdminRequired]
     #[NoCSRFRequired]
-    #[FrontpageRoute(verb: 'GET', url: '/')]
     public function index(): TemplateResponse {
         $userId = $this->getUserId();
         $stats = $this->service->getUserStats($userId);
@@ -53,17 +50,14 @@ class DispensaryController extends Controller {
     }
 
     #[NoAdminRequired]
-    #[NoCSRFRequired]
-    #[ApiRoute(verb: 'POST', url: '/dispensary/add')]
     public function addAmount(int $amount): DataResponse {
         $userId = $this->getUserId();
         $result = $this->service->addAbgabe($userId, $amount);
-        return new DataResponse($result, $result['status']);
+        return new DataResponse($result, $result['status'] ?? 200);
     }
 
     #[AdminRequired]
     #[NoCSRFRequired]
-    #[FrontpageRoute(verb: 'GET', url: '/admin')]
     public function adminIndex(): TemplateResponse {
         $list = $this->service->getAdminList();
         return new TemplateResponse(
@@ -74,8 +68,6 @@ class DispensaryController extends Controller {
     }
 
     #[AdminRequired]
-    #[NoCSRFRequired]
-    #[ApiRoute(verb: 'POST', url: '/admin/update')]
     public function updateAbgabe(int $id, int $amount): DataResponse {
         $adminId = $this->getUserId();
         $result = $this->service->adminUpdateAbgabe($id, $amount, $adminId);

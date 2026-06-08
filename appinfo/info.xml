@@ -21,7 +21,7 @@
         <navigation>
             <id>aeneas_dispensary</id>
             <name>Aeneas Dispensary</name>
-            <route>aeneas_dispensary.page.index</route>
+            <route>aeneas_dispensary.dispensary.index</route>
             <icon>app.svg</icon>
             <type>link</type>
         </navigation>

@@ -8,9 +8,9 @@ $isAdmin = $_['isAdmin'] ?? false;
     <h2>Aeneas Dispensary – persönliche Abgabe</h2>
 
     <?php if ($isAdmin): ?>
-    <div style="margin-bottom: 20px; padding: 15px; background-color: #e2f0e6; border-left: 4px solid #2d8a4e; border-radius: 4px;">
-        <p style="margin-top: 0;"><strong>Admin-Bereich</strong></p>
-        <a href="<?php p(\OC::$server->getURLGenerator()->getBaseUrl() . '/apps/aeneas_dispensary/admin'); ?>" class="button primary" style="text-decoration: none;">
+    <div class="admin-notice box">
+        <p><strong>Admin-Bereich</strong></p>
+        <a href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('aeneas_dispensary.dispensary.adminIndex')); ?>" class="button primary">
             Zur Admin-Übersicht
         </a>
     </div>

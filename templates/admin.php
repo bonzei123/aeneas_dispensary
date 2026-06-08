@@ -6,7 +6,14 @@ script('aeneas_dispensary', 'dispensary');
 $entries = $_['entries'];
 ?>
 <div id="aeneas-dispensary-admin">
+    <div style="margin-bottom: 20px;">
+        <a href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('aeneas_dispensary.dispensary.index')); ?>" class="button">
+            &laquo; Zurück zur Abgabe
+        </a>
+    </div>
+
     <h2>Aeneas Dispensary – Admin Übersicht</h2>
+    
     <table class="grid">
         <thead>
         <tr>
@@ -16,7 +23,8 @@ $entries = $_['entries'];
             <th>Timestamp</th>
             <th>Bearbeitet von</th>
             <th>Bearbeitet am</th>
-            <th>Aktion</th> </tr>
+            <th>Aktion</th> 
+        </tr>
         </thead>
         <tbody>
         <?php foreach ($entries as $e): ?>
@@ -38,5 +46,6 @@ $entries = $_['entries'];
         <?php endforeach; ?>
         </tbody>
     </table>
-    <div id="aeneas-admin-message" style="margin-top: 15px; font-weight: bold;"></div>
+    
+    <div id="aeneas-admin-message" class="admin-message"></div>
 </div>

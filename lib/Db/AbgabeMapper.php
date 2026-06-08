@@ -50,11 +50,12 @@ class AbgabeMapper extends QBMapper {
         return $this->insert($abgabe);
     }
 
-    public function getAllForAdmin(): array {
+    public function getAllForAdmin(int $limit = 1000): array {
         $qb = $this->db->getQueryBuilder();
         $qb->select('*')
             ->from('aeneas_abgabe')
-            ->orderBy('timestamp', 'DESC');
+            ->orderBy('timestamp', 'DESC')
+            ->setMaxResults($limit);
 
         return $this->findEntities($qb);
     }

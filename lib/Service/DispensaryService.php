@@ -17,6 +17,13 @@ class DispensaryService {
     ) {}
 
     public function addAbgabe(string $userId, int $amount): array {
+        if ($amount <= 0) {
+            return [
+                'status' => Http::STATUS_BAD_REQUEST,
+                'error'  => 'Die Menge muss zwingend größer als 0 sein.',
+            ];
+        }
+
         $now = new \DateTimeImmutable('now');
 
         $daySum   = $this->mapper->getSumForUserDay($userId, $now);

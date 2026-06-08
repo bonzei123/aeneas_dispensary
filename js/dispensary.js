@@ -8,11 +8,13 @@
 
         function showMessage(text, isError) {
             messageEl.textContent = text;
-            messageEl.style.color = isError ? 'red' : 'green';
+            messageEl.classList.remove('success', 'error');
+            messageEl.classList.add(isError ? 'error' : 'success');
         }
 
         userContainer.querySelectorAll('.abgabe-btn').forEach(btn => {
             btn.addEventListener('click', () => {
+                btn.disabled = true;
                 const amount = parseInt(btn.getAttribute('data-amount'), 10);
 
                 fetch(OC.generateUrl('/apps/aeneas_dispensary/dispensary/add'), {
@@ -23,15 +25,25 @@
                     },
                     body: 'amount=' + encodeURIComponent(amount)
                 })
-                .then(r => r.json().then(j => ({ status: r.status, body: j })))
+                .then(async r => {
+                    const isJson = r.headers.get('content-type')?.includes('application/json');
+                    const body = isJson ? await r.json() : null;
+                    return { status: r.status, body };
+                })
                 .then(({ status, body }) => {
                     if (status !== 200) {
-                        showMessage(body.error || 'Fehler bei der Abgabe.', true);
+                        showMessage((body && body.error) ? body.error : 'Fehler bei der Abgabe (Server-Response ' + status + ').', true);
                     } else {
                         showMessage('Abgabe gespeichert. Heute: ' + body.day + ' g, Monat: ' + body.month + ' g.', false);
                     }
                 })
-                .catch(() => showMessage('Netzwerkfehler.', true));
+                .catch(err => {
+                    console.error('Fetch Error:', err);
+                    showMessage('Netzwerk- oder Serverfehler.', true);
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                });
             });
         });
     }
@@ -45,7 +57,8 @@
 
         function showAdminMessage(text, isError) {
             adminMessageEl.textContent = text;
-            adminMessageEl.style.color = isError ? 'red' : 'green';
+            adminMessageEl.classList.remove('success', 'error');
+            adminMessageEl.classList.add(isError ? 'error' : 'success');
             setTimeout(() => { adminMessageEl.textContent = ''; }, 5000);
         }
 
@@ -54,41 +67,47 @@
                 const id = btn.getAttribute('data-id');
                 const currentAmount = btn.getAttribute('data-current');
                 
-                // Simples Prompt-Fenster für die Eingabe
                 const newAmountStr = prompt(`Neue Menge für Abgabe ID ${id} eingeben (aktuell: ${currentAmount}g):`, currentAmount);
                 
-                // Abbruch durch den User
                 if (newAmountStr === null || newAmountStr.trim() === "") {
                     return; 
                 }
 
                 const newAmount = parseInt(newAmountStr, 10);
-                if (isNaN(newAmount) || newAmount < 0) {
+                if (isNaN(newAmount) || newAmount <= 0) {
                     alert("Bitte eine gültige positive Zahl eingeben.");
                     return;
                 }
 
-                // Request an das Backend senden
+                btn.disabled = true;
+
                 fetch(OC.generateUrl('/apps/aeneas_dispensary/admin/update'), {
                     method: 'POST',
                     headers: {
                         'requesttoken': OC.requestToken,
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    // Der Controller erwartet $id und $amount als Parameter
                     body: `id=${encodeURIComponent(id)}&amount=${encodeURIComponent(newAmount)}`
                 })
-                .then(r => r.json().then(j => ({ status: r.status, body: j })))
+                .then(async r => {
+                    const isJson = r.headers.get('content-type')?.includes('application/json');
+                    const body = isJson ? await r.json() : null;
+                    return { status: r.status, body };
+                })
                 .then(({ status, body }) => {
                     if (status !== 200) {
-                        showAdminMessage(body.error || 'Fehler beim Ändern der Daten.', true);
+                        showAdminMessage((body && body.error) ? body.error : 'Fehler beim Ändern der Daten.', true);
+                        btn.disabled = false;
                     } else {
                         showAdminMessage('Erfolgreich geändert! Lade Tabelle neu...', false);
-                        // Kurze Pause, damit der Admin das grüne Feedback sieht, dann Page Reload
                         setTimeout(() => window.location.reload(), 1000);
                     }
                 })
-                .catch(() => showAdminMessage('Netzwerkfehler beim Speichern.', true));
+                .catch(err => {
+                    console.error('Fetch Error:', err);
+                    showAdminMessage('Netzwerk- oder Serverfehler beim Speichern.', true);
+                    btn.disabled = false;
+                });
             });
         });
     }
