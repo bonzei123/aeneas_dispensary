@@ -13,6 +13,14 @@ class AbgabeMapper extends QBMapper {
         parent::__construct($db, 'aeneas_abgabe', Abgabe::class);
     }
 
+    public function find(int $id): Abgabe {
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('*')
+            ->from($this->getTableName())
+            ->where($qb->expr()->eq('id', $qb->createNamedParameter($id, \OCP\DB\QueryBuilder\IQueryBuilder::PARAM_INT)));
+        return $this->findEntity($qb);
+    }
+
     public function getSumForUserDay(string $userId, \DateTimeImmutable $day): int {
         $start = $day->setTime(0, 0, 0)->getTimestamp();
         $end   = $day->setTime(23, 59, 59)->getTimestamp();
@@ -61,12 +69,21 @@ class AbgabeMapper extends QBMapper {
     }
 
     public function updateAbgabeAmount(int $id, int $newAmount, string $adminId): Abgabe {
+        // 1. Datensatz über QueryBuilder anhand der ID finden
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('*')
+            ->from('aeneas_abgabe')
+            ->where($qb->expr()->eq('id', $qb->createNamedParameter($id)));
+
         /** @var Abgabe $abgabe */
-        $abgabe = $this->find($id);
+        $abgabe = $this->findEntity($qb);
+
+        // 2. Werte aktualisieren
         $abgabe->setAmount($newAmount);
         $abgabe->setEditedBy($adminId);
         $abgabe->setEditedAt(time());
 
+        // 3. In Datenbank speichern
         return $this->update($abgabe);
     }
 }

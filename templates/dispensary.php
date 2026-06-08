@@ -1,10 +1,11 @@
 <?php
 script('aeneas_dispensary', 'dispensary');
+style('aeneas_dispensary', 'dispensary');
 /** @var array $_ */
 $stats = $_['stats'];
 $isAdmin = $_['isAdmin'] ?? false;
 ?>
-<div id="aeneas-dispensary">
+<div id="aeneas-dispensary" class="dispensary-card">
     <h2>Aeneas Dispensary – persönliche Abgabe</h2>
 
     <?php if ($isAdmin): ?>

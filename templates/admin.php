@@ -1,11 +1,11 @@
 <?php
 // Wichtig: Das JavaScript auch in der Admin-Ansicht laden!
 script('aeneas_dispensary', 'dispensary');
-
+style('aeneas_dispensary', 'dispensary');
 /** @var array $_ */
 $entries = $_['entries'];
 ?>
-<div id="aeneas-dispensary-admin">
+<div id="aeneas-dispensary-admin" class="dispensary-card">
     <div style="margin-bottom: 20px;">
         <a href="<?php p(\OC::$server->getURLGenerator()->linkToRoute('aeneas_dispensary.dispensary.index')); ?>" class="button">
             &laquo; Zurück zur Abgabe

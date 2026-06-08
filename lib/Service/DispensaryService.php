@@ -18,10 +18,7 @@ class DispensaryService {
 
     public function addAbgabe(string $userId, int $amount): array {
         if ($amount <= 0) {
-            return [
-                'status' => Http::STATUS_BAD_REQUEST,
-                'error'  => 'Die Menge muss zwingend größer als 0 sein.',
-            ];
+            throw new \InvalidArgumentException('Die Menge muss größer als 0 sein.');
         }
 
         $now = new \DateTimeImmutable('now');
@@ -33,21 +30,11 @@ class DispensaryService {
         $newMonthSum = $monthSum + $amount;
 
         if ($newDaySum > self::DAILY_LIMIT) {
-            return [
-                'status' => Http::STATUS_BAD_REQUEST,
-                'error'  => 'Tageslimit von 25g überschritten.',
-                'day'    => $daySum,
-                'month'  => $monthSum,
-            ];
+            throw new LimitExceededException('Tageslimit von 25g überschritten.');
         }
 
-        if ($newMonthSum > self::MONTHLY_LIMIT) {
-            return [
-                'status' => Http::STATUS_BAD_REQUEST,
-                'error'  => 'Monatslimit von 50g überschritten.',
-                'day'    => $daySum,
-                'month'  => $monthSum,
-            ];
+         if ($newMonthSum > self::MONTHLY_LIMIT) {
+            throw new LimitExceededException('Monatslimit von 50g überschritten.');
         }
 
         $this->mapper->insertAbgabe($userId, $amount);
