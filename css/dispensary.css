@@ -1,49 +1,62 @@
-#aeneas-dispensary, 
+/* Hauptcontainer wie native Nextcloud-Apps */
+#aeneas-dispensary,
 #aeneas-dispensary-admin {
-    padding: var(--default-grid-unit);
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
+    padding: var(--default-grid-unit);
 }
 
-/* Karten-Look für den Inhalt */
+/* Karten / Boxen */
 .dispensary-card {
-    background-color: var(--color-main-background);
+    background: var(--color-main-background);
     border: 1px solid var(--color-border);
     border-radius: var(--border-radius-large);
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: calc(var(--default-grid-unit) * 2);
+    margin-bottom: calc(var(--default-grid-unit) * 2);
+    box-shadow: var(--shadow-2dp);
 }
 
-/* Buttons im Nextcloud-Stil */
-.buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.abgabe-btn {
+/* Buttons */
+.abgabe-btn,
+.edit-abgabe-btn {
+    @apply --button; /* Nextcloud internal mixin */
     padding: 8px 16px;
+    border-radius: var(--border-radius);
+    background: var(--color-primary-element);
+    color: var(--color-primary-text);
+    border: none;
     cursor: pointer;
 }
 
-/* Tabelle im Nextcloud-Stil */
+.abgabe-btn:hover,
+.edit-abgabe-btn:hover {
+    background: var(--color-primary-element-hover);
+}
+
+/* Button-Container */
+.buttons {
+    display: flex;
+    gap: var(--default-grid-unit);
+    margin-top: var(--default-grid-unit);
+}
+
+/* Tabelle */
 table.grid {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin-top: 20px;
-    background-color: var(--color-main-background);
-    border-radius: var(--border-radius);
+    border-collapse: collapse;
+    margin-top: var(--default-grid-unit);
+    background: var(--color-main-background);
+    border-radius: var(--border-radius-large);
     overflow: hidden;
     border: 1px solid var(--color-border);
 }
 
 table.grid th {
-    background-color: var(--color-background-hover);
+    background: var(--color-background-hover);
     padding: 12px;
     font-weight: 600;
     text-transform: uppercase;
-    font-size: 0.8em;
+    font-size: 0.75rem;
     color: var(--color-text-maxcontrast);
 }
 
@@ -53,10 +66,20 @@ table.grid td {
 }
 
 /* Feedback */
-.admin-message {
-    padding: 10px;
+.admin-message,
+#aeneas-dispensary-message {
+    margin-top: var(--default-grid-unit);
+    padding: var(--default-grid-unit);
     border-radius: var(--border-radius);
-    margin-top: 10px;
+    font-weight: 600;
 }
-.success { background: var(--color-success-light); color: var(--color-success); }
-.error { background: var(--color-error-light); color: var(--color-error); }
+
+.success {
+    background: var(--color-success-light);
+    color: var(--color-success);
+}
+
+.error {
+    background: var(--color-error-light);
+    color: var(--color-error);
+}
