@@ -4,7 +4,7 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "OCA\\AeneasDispensary\\": "lib/"
+            "OCA\\AeneasDispensary\\": "lib/AeneasDispensary/"
         }
     },
     "require": {}
