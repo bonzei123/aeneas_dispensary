@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<database>
+    <table name="aeneas_abgabe">
+        <column name="id" type="integer" length="4">
+            <primary>true</primary>
+            <autoincrement>true</autoincrement>
+        </column>
+        <column name="user_id" type="string" length="64" notnull="true"/>
+        <column name="amount" type="integer" length="4" notnull="true"/>
+        <column name="timestamp" type="integer" length="4" notnull="true"/>
+        <column name="edited_by" type="string" length="64" notnull="false"/>
+        <column name="edited_at" type="integer" length="4" notnull="false"/>
+        <index name="abgabe_user_idx">
+            <field>user_id</field>
+        </index>
+    </table>
+</database>

@@ -1,0 +1,11 @@
+{
+    "name": "aeneas/dispensary",
+    "description": "Aeneas Dispensary App",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "OCA\\AeneasDispensary\\": "lib/"
+        }
+    },
+    "require": {}
+}
