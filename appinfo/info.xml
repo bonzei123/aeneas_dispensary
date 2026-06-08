@@ -6,7 +6,7 @@
     <name>Aeneas Dispensary</name>
     <summary>Abgabe-Tracking</summary>
     <description>Tracking der persönlichen Abgabe mit Limits.</description>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <licence>AGPL-3.0-or-later</licence>
 
     <author mail="florian.wenzel3112@gmail.com">Florian</author>
